@@ -2,10 +2,21 @@ import React from 'react';
 import {
     useRecoilState
 } from 'recoil';
-
+import styled from 'styled-components';
 import searchTextState from './searchTextState';
 import searchTypeState from './searchTypeState';
 import itemsVisibleState from './itemsVisibleState';
+
+
+export const SearchFormRow = styled.div`
+    padding: 10px;
+    background-color: #c4edf7;
+`;
+
+export const Label = styled.label`
+    width: 120px;
+    display: inline-block;
+`;
 
 function StoreSearch() {
 
@@ -23,15 +34,24 @@ function StoreSearch() {
     };
 
     return (
-        <div>
-            Search Type : <select value={searchType} onChange={onSearchTypeChange}>
-                <option value="musicArtist">Music Artist</option>
-                <option value="album">Album</option>
-                <option value="song">Song</option>
-            </select>
-            <br /><br />
-            Search Text : <input type="text" value={searchText} onChange={onSearchTextChange} />
-        </div>
+        <>
+            <SearchFormRow>
+                <Label>
+                    Search Type : 
+                </Label>
+                <select value={searchType} onChange={onSearchTypeChange}>
+                    <option value="musicArtist">Music Artist</option>
+                    <option value="album">Album</option>
+                    <option value="song">Song</option>
+                </select>
+            </SearchFormRow>
+            <SearchFormRow>
+                <Label>
+                    Search Text :
+                </Label>
+                <input type="text" value={searchText} onChange={onSearchTextChange} />
+            </SearchFormRow>
+        </>
     );
 }
 

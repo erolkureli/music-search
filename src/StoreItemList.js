@@ -3,12 +3,32 @@ import {
   useRecoilValue,
   useRecoilState
 } from 'recoil';
+import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import searchTextState from './searchTextState';
 import searchTypeState from './searchTypeState';
 import itemsVisibleState from './itemsVisibleState';
 import itemsState from './itemsState';
+import { SearchFormRow, Label } from './StoreSearch';
+
+const CommentFormContainer = styled.div`
+  margin: 15px 0;
+`;
+
+const SectionTitle = styled.div`
+  background-color: #6bd46b;
+  padding: 10px;
+  font-weight: bold;
+`;
+
+const CommentsSongLine = styled.div`
+  padding: 10px;
+`;
+
+const CommentBox = styled.div`
+  padding: 8px;
+`;
 
 const searchItem = (e, searchText, searchType, setItems, setResultsToDisplay, setSearchText, setComments, setItemsVisible) => {
   e.preventDefault();
@@ -125,34 +145,63 @@ function StoreItemList() {
 
   return (
     <div>
-
-      Search : <button onClick={e => searchItem(e, searchText, searchType, setItems, setResultsToDisplay, setSearchText, setComments, setItemsVisible)} >Search</button>
-      <br />
-      <br />
-      <br />
-      <br />
+      <SearchFormRow>
+        <Label>
+          Search :
+        </Label>
+        <button onClick={e => searchItem(e, searchText, searchType, setItems, setResultsToDisplay, setSearchText, setComments, setItemsVisible)} >Search</button>
+      </SearchFormRow>
 
       { itemsVisible &&
         <div>
-          <div>Album : <input type="text" value={commentCollectionName} onChange={onCommentCollectionNameTextChange} /></div>
-          <div>Comment : <input type="text" value={newComment} onChange={onNewCommentTextChange} /></div>
-          <div>{searchType === 'album' && <button onClick={e => addView(e, commentCollectionName, newComment, setNewComment, setCommentCollectionName)}>Add New Comment</button>}</div>
-
-          {comments.length > 0 && "Comments"}
-          {comments.map((data, i) => {
-            return (
-              <div style={{ padding: '20px' }} key={i} >
-                <div>{data.collectionName}</div>
-                <div>{data.comment}</div>
-                <div>Liked : {<input type="checkbox" checked={data.liked === "1"} onClick={e => likeUnlike(e, data.collectionName, data.comment, data.liked)} />}</div>
-                <div><button onClick={e => updateView(e, data.collectionName, data.comment, newComment, data.liked, setNewComment, setCommentCollectionName)}>Update Comment</button></div>
-              </div>
-            )
-          })}
+          <CommentFormContainer>
+            <SearchFormRow>
+              <Label>Album : </Label>
+              <input type="text" value={commentCollectionName} onChange={onCommentCollectionNameTextChange} />
+            </SearchFormRow>
+            <SearchFormRow>
+              <Label>Comment : </Label>
+              <input type="text" value={newComment} onChange={onNewCommentTextChange} />
+            </SearchFormRow>
+            <SearchFormRow>
+              {
+                searchType === 'album' &&
+                <>
+                  <Label>Action : </Label>
+                  <button onClick={e => addView(e, commentCollectionName, newComment, setNewComment, setCommentCollectionName)}>Add New Comment</button>
+                </>
+              }
+            </SearchFormRow>
+          </CommentFormContainer>
+          {
+            comments.length > 0 &&
+            <>
+            <SectionTitle>Comments</SectionTitle>
+              <CommentsSongLine>Comment(s) for <strong>{comments[0].collectionName}</strong></CommentsSongLine>
+              {comments.map((data, i) => {
+                return (
+                  <CommentBox key={i} >
+                    <SearchFormRow>
+                      <Label>Comment :</Label>
+                      <span>{data.comment}</span>
+                    </SearchFormRow>
+                    <SearchFormRow>
+                      <Label>Liked :</Label>
+                      {<input type="checkbox" checked={data.liked === "1"} onClick={e => likeUnlike(e, data.collectionName, data.comment, data.liked)} />}
+                      </SearchFormRow>
+                    <SearchFormRow><button onClick={e => updateView(e, data.collectionName, data.comment, newComment, data.liked, setNewComment, setCommentCollectionName)}>Update Comment</button></SearchFormRow>
+                  </CommentBox>
+                )
+              })}
+            </>
+          }
 
           <div>
             <div>
-              {items != null && items.length > 0 && "Records"}
+              {
+                items != null && items.length > 0 &&
+                <SectionTitle>Records</SectionTitle>
+              }
 
               <InfiniteScroll
                 dataLength={resultsToDisplay.length}
@@ -168,13 +217,29 @@ function StoreItemList() {
               >
                 {resultsToDisplay.map((data, i) => {
                   return (
-                    <div style={{ padding: '20px' }} key={i} >
-                      <div>{searchType === 'album' && data.collectionName}</div>
-                      <div>{data.artistName}</div>
-                      <div>{data.primaryGenreName}</div>
-                      <div>{data.artistId}</div>
-                      <div>{searchType === 'album' && data.collectionName && <button onClick={e => searchViews(e, data.collectionName, setComments)}>View Comments</button>}</div>
-                    </div>
+                    <CommentBox key={i} >
+                      {
+                        searchType === 'album' &&
+                        <SearchFormRow>
+                          <Label>Album name :</Label>
+                          <span>{data.collectionName}</span>
+                        </SearchFormRow>
+                      }
+                      <SearchFormRow>
+                        <Label>Artist :</Label>
+                        <span>{data.artistName}</span>
+                      </SearchFormRow>
+                      <SearchFormRow>
+                        <Label>Genre :</Label>
+                        <span>{data.primaryGenreName}</span>
+                      </SearchFormRow>
+                      {
+                        searchType === 'album' && data.collectionName &&
+                        <SearchFormRow>
+                          <button onClick={e => searchViews(e, data.collectionName, setComments)}>View Comments</button>
+                        </SearchFormRow>
+                      }
+                    </CommentBox>
                   )
                 })}
               </InfiniteScroll>
