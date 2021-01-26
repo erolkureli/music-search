@@ -5,17 +5,20 @@ import {
 
 import searchTextState from './searchTextState';
 import searchTypeState from './searchTypeState';
+import itemsVisibleState from './itemsVisibleState';
 
-function ArtistSearch() {
+function StoreSearch() {
 
     const [searchText, setSearchText] = useRecoilState(searchTextState);
     const [searchType, setSearchType] = useRecoilState(searchTypeState);
+    const [itemsVisible, setItemsVisible] = useRecoilState(itemsVisibleState);
 
     const onSearchTextChange = (event) => {
         setSearchText(event.target.value);
     };
 
     const onSearchTypeChange = (event) => {
+        setItemsVisible(false);
         setSearchType(event.target.value);
     };
 
@@ -32,4 +35,4 @@ function ArtistSearch() {
     );
 }
 
-export default ArtistSearch;
+export default StoreSearch;

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import ArtistSearch from './ArtistSearch';
-import ArtistList from './ArtistList';
+import StoreSearch from './StoreSearch';
+import StoreItemList from './StoreItemList';
 
 function MusicStore() {
   return (
     <div>
-      <ArtistSearch/>
-      <ArtistList/>
+      <StoreSearch/>
+      <StoreItemList/>
     </div>
   );
 }
