@@ -75,12 +75,13 @@ const searchViews = (e, collectionName, setComments) => {
 
 }
 
-const addView = (e, collectionName, newComment, setNewComment, setCommentCollectionName) => {
+const addView = (e, collectionName, newComment, setNewComment, setCommentCollectionName, setComments) => {
   e.preventDefault();
 
   fetch('http://localhost:3001/api/albums/add?collectionName=' + collectionName + '&newComment=' + newComment)
     .then(response => response.json())
     .then(response => {
+      searchViews(e, collectionName, setComments);
       alert("Comment has been recorded");
     })
     .catch(error => console.log(' Error ' + error));
@@ -90,12 +91,13 @@ const addView = (e, collectionName, newComment, setNewComment, setCommentCollect
 
 }
 
-const updateView = (e, collectionName, oldComment, newComment, liked, setNewComment, setCommentCollectionName) => {
+const updateView = (e, collectionName, oldComment, newComment, liked, setNewComment, setCommentCollectionName, setComments) => {
   e.preventDefault();
 
   fetch('http://localhost:3001/api/albums/update?collectionName=' + collectionName + '&newComment=' + newComment + '&oldComment=' + oldComment + '&liked=' + liked)
     .then(response => response.json())
     .then(response => {
+      searchViews(e, collectionName, setComments);
       alert("Comment has been updated");
     })
     .catch(error => console.log(' Error ' + error));
@@ -105,7 +107,7 @@ const updateView = (e, collectionName, oldComment, newComment, liked, setNewComm
 
 }
 
-const likeUnlike = (e, collectionName, comment, liked) => {
+const likeUnlike = (e, collectionName, comment, liked, setComments) => {
   e.preventDefault();
 
   const newLiked = liked === "0" ? "1" : "0";
@@ -113,6 +115,7 @@ const likeUnlike = (e, collectionName, comment, liked) => {
   fetch('http://localhost:3001/api/albums/toggleLike?collectionName=' + collectionName + '&comment=' + comment + '&liked=' + newLiked)
     .then(response => response.json())
     .then(response => {
+      searchViews(e, collectionName, setComments);
       alert("Comment has been updated");
     })
     .catch(error => console.log(' Error ' + error));
@@ -168,7 +171,7 @@ function StoreItemList() {
                 searchType === 'album' &&
                 <>
                   <Label>Action : </Label>
-                  <button onClick={e => addView(e, commentCollectionName, newComment, setNewComment, setCommentCollectionName)}>Add New Comment</button>
+                  <button onClick={e => addView(e, commentCollectionName, newComment, setNewComment, setCommentCollectionName, setComments)}>Add New Comment</button>
                 </>
               }
             </SearchFormRow>
@@ -187,9 +190,9 @@ function StoreItemList() {
                     </SearchFormRow>
                     <SearchFormRow>
                       <Label>Liked :</Label>
-                      {<input type="checkbox" checked={data.liked === "1"} onClick={e => likeUnlike(e, data.collectionName, data.comment, data.liked)} />}
+                      {<input type="checkbox" checked={data.liked === "1"} onClick={e => likeUnlike(e, data.collectionName, data.comment, data.liked, setComments)} />}
                       </SearchFormRow>
-                    <SearchFormRow><button onClick={e => updateView(e, data.collectionName, data.comment, newComment, data.liked, setNewComment, setCommentCollectionName)}>Update Comment</button></SearchFormRow>
+                    <SearchFormRow><button onClick={e => updateView(e, data.collectionName, data.comment, newComment, data.liked, setNewComment, setCommentCollectionName, setComments)}>Update Comment</button></SearchFormRow>
                   </CommentBox>
                 )
               })}

@@ -1,11 +1,10 @@
 import React from 'react';
-import {
-    useRecoilState
-} from 'recoil';
+import {useRecoilState} from 'recoil';
 import styled from 'styled-components';
 import searchTextState from './searchTextState';
 import searchTypeState from './searchTypeState';
 import itemsVisibleState from './itemsVisibleState';
+import SearchForm from './SearchForm';
 
 
 export const SearchFormRow = styled.div`
@@ -35,7 +34,8 @@ function StoreSearch() {
 
     return (
         <>
-            <SearchFormRow>
+        <SearchForm searchType={searchType} onSearchTypeChange={onSearchTypeChange} searchText={searchText} onSearchTextChange={onSearchTextChange}/>
+            {/*<SearchFormRow>
                 <Label>
                     Search Type : 
                 </Label>
@@ -50,7 +50,7 @@ function StoreSearch() {
                     Search Text :
                 </Label>
                 <input type="text" value={searchText} onChange={onSearchTextChange} />
-            </SearchFormRow>
+            </SearchFormRow>*/}
         </>
     );
 }
