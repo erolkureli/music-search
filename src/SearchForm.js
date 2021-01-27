@@ -1,5 +1,14 @@
 import React from 'react';
-import { SearchFormRow, Label } from './StoreSearch';
+import styled from 'styled-components';
+export const SearchFormRow = styled.div`
+    padding: 10px;
+    background-color: #c4edf7;
+`;
+
+export const Label = styled.label`
+    width: 120px;
+    display: inline-block;
+`;
 
 function SearchForm(props) {
 
