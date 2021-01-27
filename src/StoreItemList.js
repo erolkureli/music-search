@@ -30,6 +30,7 @@ const CommentBox = styled.div`
   padding: 8px;
 `;
 
+
 const searchItem = (e, searchText, searchType, setItems, setResultsToDisplay, setSearchText, setComments, setItemsVisible) => {
   e.preventDefault();
 
